@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Flask 前端测试</title>
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <style>
+    .btn-group {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      width: 80%
+    }
+
+    #result {
+      width: 80%;
+    }
+
+    /* .button{
+      border: 0px;
+      background-color: deepskyblue;
+      color: white;
+      padding: 5px 15px;
+      margin-left: 10px;
+    } */
+
+    #file {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="btn-group">
+    <button id="btn-get-info">Get info</button>
+    <button id="btn-post-info">Post info</button>
+    <button id="btn-post-params">Post Params</button>
+    <button id="btn-status-code">Status Code</button>
+
+    <form method="post" action="" enctype="multipart/form-data" id="myform">
+      <div >
+          <input type="file" id="file" name="file" />
+          <input type="button" class="button" value="Upload" id="btn_upload">
+      </div>
+    </form>
+  </div>
+  <textarea name="result" id="result" cols="30" rows="10"></textarea>
+
+  <script>
+    var baseUrl = 'http://192.168.31.80' + ':' + '8000'
+    var getInfoUrl = baseUrl + '/api/info'
+    var postParamsUrl = baseUrl + '/api/params'
+    var uploadImageUrl = baseUrl + '/api/pic'
+    var statusCodeUrl = baseUrl + '/api/stcode'
+
+    $('#btn-get-info').click(e => {
+      $.ajax({
+        type: 'get',
+        url: getInfoUrl,
+        data: {
+          type: 'male',
+          time: '2019-12-01'
+        },
+        success: data => {
+          $('#result').text(data)
+        },
+        error: (xhr, type) => { }
+      })
+    })
+
+    $('#btn-post-info').click(e => {
+      $.ajax({
+        type: 'post',
+        url: getInfoUrl,
+        data: {
+          name: 'Awesome_Leif',
+          age: 18
+        },
+        success: data => {
+          $('#result').text(data)
+        },
+        error: (xhr, type) => { }
+      })
+    })
+
+    $('#btn-post-params').click(e => {
+      $.ajax({
+        type: 'post',
+        url: postParamsUrl,
+        data: {
+          browser: 'Chrome',
+          os: 'windows',
+          computer: 'acer',
+          folder: 'c://programm files'
+        },
+        success: data => {
+          $('#result').text(data)
+        },
+        error: (xhr, type) => { }
+      })
+    })
+
+    $('#file').click((e) => {
+      let fd = new FormData();
+      let files = $('#file')[0].files[0];
+      if(files === undefined){
+        return;
+      }
+      fd.append('file',files);
+
+      $.ajax({
+          url: uploadImageUrl,
+          type: 'post',
+          data: fd,
+          contentType: false,
+          processData: false,
+          success: response => {
+            $('#result').text(data)
+          },
+          error: err => {
+
+          }
+      });
+    })
+
+    $("#btn_upload").click(e => {
+      $('#file').trigger('click');
+    });
+
+    $('#btn-status-code').click(e => {
+      $.ajax({
+        type: 'get',
+        url: statusCodeUrl,
+        success: data => {
+          $('#result').text(data)
+        },
+        error: (xhr, type) => {
+          if(xhr.status === 411) {
+            $('#result').text('status code: 411')
+          }
+        }
+      })
+    })
+  </script>
+</body>
+
+</html>
