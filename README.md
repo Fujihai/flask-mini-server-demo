@@ -95,3 +95,14 @@ def statusCode():
   return json.dumps({'retcode': 0}), 411
 ```
 
+## json 文件读取
+
+```python
+with open('./table.json', 'r+') as f:
+  data = json.loads(f.read())
+
+@app.route('/api/json')
+def getJson():
+  return json.dumps(data)
+```
+

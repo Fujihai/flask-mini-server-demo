@@ -11,6 +11,10 @@ CORS(app, supports_credentials=True, resources=r'/*')
 
 CORS(app)
 
+# json 文件读取
+with open('./table.json', 'r+') as f:
+  data = json.loads(f.read())
+
 @app.route('/')
 def index():
   return 'Hello,Python Flask!'
@@ -56,7 +60,11 @@ def pic():
 @app.route('/api/stcode')
 def statusCode():
   return json.dumps({'retcode': 0}), 411
-  
+
+@app.route('/api/json')
+def getJson():
+  return json.dumps(data)
+
 
 
 app.run(debug=True, host='0.0.0.0', port=8000)

@@ -40,6 +40,7 @@
     <button id="btn-post-info">Post info</button>
     <button id="btn-post-params">Post Params</button>
     <button id="btn-status-code">Status Code</button>
+    <button id="btn-json">Get Json</button>
 
     <form method="post" action="" enctype="multipart/form-data" id="myform">
       <div >
@@ -56,6 +57,7 @@
     var postParamsUrl = baseUrl + '/api/params'
     var uploadImageUrl = baseUrl + '/api/pic'
     var statusCodeUrl = baseUrl + '/api/stcode'
+    var getJsonUrl = baseUrl + '/api/json'
 
     $('#btn-get-info').click(e => {
       $.ajax({
@@ -145,6 +147,19 @@
         }
       })
     })
+
+    $("#btn-json").click(e => {
+      $.ajax({
+        type: 'get',
+        url: getJsonUrl,
+        success: data => {
+          $('#result').text(data)
+        },
+        error: (xhr, type) => {
+          $('#result').text('error')
+        }
+      })
+    });
   </script>
 </body>
 
